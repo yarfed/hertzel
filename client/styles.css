@@ -1,0 +1,57 @@
+
+login form {
+    height: 300px;
+    width: 400px;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left: -200px;
+    margin-top: -150px;
+}
+
+login form img {
+    float: left;
+    height: 100%;
+}
+
+login form input{
+    border-radius: 3px;
+    margin: 3px 0;
+}
+
+login form button{
+    margin: 0 10px ;
+}
+
+login .logo-text *{
+    margin: 0;
+    font-style: italic;
+    font-family: courier,sans-serif ;
+}
+
+login .logo-text{
+    margin: 30px 0;
+}
+user{
+    display:inline-block;
+    float:right;
+}
+user online, user offline{
+
+}
+user .online:before{
+    content:"\2022";
+    font-size: 200%;
+    vertical-align: middle;
+    color: green;
+}
+user .offline:before{
+    content:"\2022";
+    font-size: 200%;
+    vertical-align: middle;
+    color: red;
+}
+
+header{
+    overflow: auto;
+}

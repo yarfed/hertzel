@@ -1,0 +1,13 @@
+
+<form  ng-submit="$ctrl.submit($event);">
+    <img src="../img/logo1.png">
+    <div class ="logo-text">
+        <h1>Hertzel</h1>
+        <h5>your office homie</h5>
+    </div>
+<span>{{$ctrl.message}}</span>
+    <input type="text" ng-model="$ctrl.user.login"   placeholder="login" required>
+    <input type="password" ng-model="$ctrl.user.password"  placeholder="password" required>
+    <button type="button" ng-click="$ctrl.register();">Register</button>
+    <button type="submit" >Login</button>
+</form>

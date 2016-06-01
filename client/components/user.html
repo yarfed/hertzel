@@ -1,0 +1,6 @@
+<span >user: {{$ctrl.data.user.name}}</span>
+<span class="online" ng-show="$ctrl.data.user.connected"> online</span>
+<span class="offline" ng-hide="$ctrl.data.user.connected"> offline</span><br>
+<button ng-click="$ctrl.model.logout();">logout</button>
+<button ng-click="$ctrl.model.deleteUser();">delete</button>
+
