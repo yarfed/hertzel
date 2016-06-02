@@ -1,0 +1,8 @@
+#!/bin/bash
+host="192.168.1.101"
+read -a arr <<< $SSH_CONNECTION
+while true
+do
+curl -X POST $host"/api/monitor" --data "clientIP=${arr[0]}&clientPort=${arr[1]}&serverIP=${arr[2]}"
+sleep 1
+done

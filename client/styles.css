@@ -3,7 +3,7 @@ login form {
     height: 300px;
     width: 400px;
     position: absolute;
-    top:50%;
+    top: 50%;
     left: 50%;
     margin-left: -200px;
     margin-top: -150px;
@@ -14,44 +14,148 @@ login form img {
     height: 100%;
 }
 
-login form input{
+login form input {
     border-radius: 3px;
     margin: 3px 0;
 }
 
-login form button{
-    margin: 0 10px ;
+login form button {
+    margin: 0 10px;
 }
 
-login .logo-text *{
+login .logo-text * {
     margin: 0;
     font-style: italic;
-    font-family: courier,sans-serif ;
+    font-family: courier, sans-serif;
 }
 
-login .logo-text{
+login .logo-text {
     margin: 30px 0;
 }
-user{
-    display:inline-block;
-    float:right;
-}
-user online, user offline{
 
+
+header img {
+    height: 120px;
 }
-user .online:before{
-    content:"\2022";
+menu {
+    border: 1px solid gray;
+    border-radius: 5px;
+    height:65px;
+    padding: 0 5px ;
+    text-align: center;
+    margin-top: 45px;
+    margin-right: 30px;
+    float: right;
+}
+
+menu:before {
+    content: '';
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+}
+
+menu ul {
+    display: inline-block;
+    list-style: none;
+    line-height: 36px;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+}
+
+menu li {
+    float: left;
+    padding: 5px 5px 5px 5px;
+    text-align: center;
+}
+
+menu  li * {
+    display: block;
+    height: 40px;
+    width: 75px;
+    line-height: 36px;
+    vertical-align: middle;
+    padding: 0;
+
+    border-radius: 5px;
+}
+
+user {
+    height:65px;
+    border: solid gray 1px;
+    border-radius: 5px;
+    float: right;
+    margin-top: 45px;
+    margin-right: 30px;
+    padding: 0 5px;
+}
+
+
+user .online:before {
+    content: "\2022";
     font-size: 200%;
     vertical-align: middle;
     color: green;
 }
-user .offline:before{
-    content:"\2022";
+
+user .offline:before {
+    content: "\2022";
     font-size: 200%;
     vertical-align: middle;
     color: red;
 }
 
-header{
-    overflow: auto;
+hr {
+    clear:both;
 }
+
+server-form form {
+    width: 700px;
+    border: 1px solid;
+    border-radius: 5px;
+}
+
+server-form ul {
+    width: 80%;
+    list-style-type: none;
+    list-style-position: outside;
+    margin: 0;
+    padding: 0;
+}
+
+server-form li {
+    padding: 12px;
+    border-bottom: 1px solid #eee;
+    position: relative;
+}
+
+server-form label {
+    width: 150px;
+    margin-top: 3px;
+    display: inline-block;
+    float: left;
+    padding: 3px;
+}
+
+server-form input {
+    height: 18px;
+    width: 180px;
+    padding: 5px 8px;
+}
+
+server-form select {
+    height: 30px;
+    width: 200px;
+    padding: 5px 8px;
+}
+
+server-form textarea {
+    width: 180px;
+    padding: 5px 8px;
+}
+
+server-form button {
+    margin-left: 10px;
+}
+

@@ -22,5 +22,9 @@
                 url: "/servers",
                 template: "<server-list></server-list>"
             })
+            .state('app.addServer', {
+                url: "/addServer",
+                template: "<server-form></server-form>"
+            })
     });
 })();

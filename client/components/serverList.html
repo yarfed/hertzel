@@ -1,1 +1,15 @@
-{{$ctrl.data.users.length}}
+<button ng-click="$ctrl.$state.go('app.addServer');">Add Server</button>
+<label>
+    all
+    <input type="radio" ng-model="$ctrl.data.filter" value="all">
+</label>
+<label>
+    my
+    <input type="radio" ng-model="$ctrl.data.filter" value="my">
+</label>
+<label>
+    user
+    <input type="radio" ng-model="$ctrl.data.filter" value="user">
+    ->
+</label>
+{{$ctrl.data.filter}}

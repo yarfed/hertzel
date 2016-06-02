@@ -15,6 +15,7 @@
     "jsonwebtoken": "^7.0.0",
     "mongoose": "^4.4.19",
     "morgan": "^1.7.0",
+    "ping": "^0.1.10",
     "request-ip": "^1.2.2",
     "socket.io": "^1.4.6"
   }

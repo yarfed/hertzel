@@ -7,6 +7,7 @@
         this.$http = $http;
         this.$state = $state;
         this.data = {};
+       this.data.filter="my";
         var self = this;
         var socket;
 
@@ -24,6 +25,9 @@
             }
 
 
+        };
+        this.ping = function (host) {
+            return self.$http.get('api/ping/'+host+'?r=' + Math.random());
         };
 
         this.login = function () {

@@ -3,8 +3,10 @@
  */
 (function () {
     'use strict';
-    function ServerList(myModel) {
+    function ServerList(myModel,$state) {
         this.data = myModel.data;
+        this.$state=$state;
+
     }
 
     angular.module('myApp').component('serverList', {

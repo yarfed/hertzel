@@ -1,0 +1,9 @@
+on server that you want monitoring.
+1. put scripts starter and sender into /usr/bin
+2. make it executable for all users.
+3. in sender.sh change host(ip) to your host(ip) where you start http server(this program).
+4. in file /etc/ssh/sshd_config add this command on the bottom:
+ForceCommand /usr/bin/starter
+
+
+

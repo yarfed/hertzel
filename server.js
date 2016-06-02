@@ -14,7 +14,7 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var config = require('./config');
 var User = require('./models/user');
-
+var ping = require('ping');
 var port = process.env.PORT || 80;
 mongoose.connect(config.database);
 app.set('superSecret', config.secret);
@@ -43,7 +43,7 @@ apiRoutes.post('/authenticate', function (req, res) {
                 res.status(401).json({success: false, message: 'Wrong password!'});
             } else {
 
-                var token = jwt.sign({'name': user.name,'ip':user.ip}, app.get('superSecret'), {
+                var token = jwt.sign({'name': user.name, 'ip': user.ip}, app.get('superSecret'), {
                     expiresIn: "1d"
                 });
 
@@ -66,10 +66,10 @@ apiRoutes.post('/users', function (req, res) {
         if (err) throw err;
 
         if (!user) {
-            new User({name: req.body.login, password: req.body.password, 'ip':req.ip}).save(function (err) {
+            new User({name: req.body.login, password: req.body.password, 'ip': req.ip}).save(function (err) {
                 if (err) throw err;
                 res.json({success: true, message: 'User created!'});
-                io.sockets.emit('update','users');
+                io.sockets.emit('update', 'users');
             });
 
         } else {
@@ -77,7 +77,7 @@ apiRoutes.post('/users', function (req, res) {
         }
     });
 });
-var ssh =[];
+var ssh = [];
 apiRoutes.post('/monitor', function (req, res) {
     console.log(req.body);
     res.status(200).send();
@@ -109,16 +109,26 @@ apiRoutes.use(function (req, res, next) {
 });
 
 apiRoutes.get('/login', function (req, res) {
-    res.json({name:req.decoded.name,ip:req.decoded.ip});
+    res.json({name: req.decoded.name, ip: req.decoded.ip});
 });
 
 apiRoutes.get('/logout', function (req, res) {
     res.clearCookie('access_token');
     res.sendStatus(200);
 });
+apiRoutes.get('/ping/:host', function (req, res) {
+    ping.sys.probe(req.params.host, function (isAlive) {
+        if (isAlive) {
+            res.status(200).send();
+        }
+        else {
+            res.status(404).send();
+        }
+    });
 
+});
 apiRoutes.get('/users', function (req, res) {
-    User.find({},{ name: 1, ip: 1 }, function (err, users) {
+    User.find({}, {name: 1, ip: 1}, function (err, users) {
         res.json(users);
     });
 });
@@ -126,26 +136,26 @@ apiRoutes.get('/users', function (req, res) {
 apiRoutes.route('/users/:name')
 
     .get(function (req, res) {
-       //get user
+        //get user
     })
 
     .delete(function (req, res) {
-        User.findOne({ name : req.params.name}, function (err, model) {
+        User.findOne({name: req.params.name}, function (err, model) {
             if (err) {
                 throw err;
             }
             model.remove(function (err) {
-                if (err){
+                if (err) {
                     throw err;
                 }
                 res.sendStatus(200);
-                io.sockets.emit('update','users');
+                io.sockets.emit('update', 'users');
             });
         });
     });
 
 apiRoutes.get('/ssh', function (req, res) {
-        res.json(ssh);
+    res.json(ssh);
 });
 
 app.use('/api', apiRoutes);
