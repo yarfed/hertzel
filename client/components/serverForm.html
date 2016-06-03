@@ -1,0 +1,35 @@
+<h3>Add new Server</h3>
+<form ng-submit="$ctrl.submit($event);">
+    <ul class="fields">
+        <li><label>IP adress*</label>
+            <input type="text" ng-model="$ctrl.server.ip"  required>
+            <!-- pattern="((25[0-5]|2[0-4]\d|[01]?\d\d?)\.){3}(25[0-5]|2[0-4]\d|[01]?\d\d?)"-->
+            <button  type="button" ng-click="$ctrl.ping($ctrl.server.ip)">ping</button>
+            <span>{{$ctrl.pingOk}}</span>
+        </li>
+        <li>
+            <label>Type</label>
+            <select  ng-model="$ctrl.server.type">
+                <option value="Virtual Machine">Virtual Machine</option>
+                <option value="Physical Machine">Physical Machine</option>
+            </select>
+        </li>
+        <li >
+            <label>Owner(optional)</label>
+            <select  ng-model="$ctrl.server.owner">
+                <option ng-repeat="user in $ctrl.data.users" value="{{user.name}}">{{user.name}}</option>
+            </select>
+            <button  type="button" ng-click="$ctrl.server.owner=$ctrl.data.user.name;"><-me</button>
+            <button  type="button" ng-click="$ctrl.server.owner=null;">clear owner</button>
+
+        </li>
+        <li>
+            <label>Description</label>
+            <textarea ng-model="$ctrl.server.description" ></textarea>
+        </li>
+        <li>
+            <button class="submit" type="submit">Ok</button>
+            <button class="cancel" type="button" ng-click="$ctrl.model.$state.go('app.servers');">Cancel</button>
+        </li>
+    </ul>
+</form>
