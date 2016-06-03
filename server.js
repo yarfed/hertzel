@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 var jwt = require('jsonwebtoken');
 var config = require('./config');
 var User = require('./models/user');
+var Server = require('./models/server');
 var ping = require('ping');
 var port = process.env.PORT || 80;
 mongoose.connect(config.database);
@@ -26,12 +27,9 @@ app.use(morgan('dev'));
 
 var apiRoutes = express.Router();
 
+//set jwt token into cookies
 apiRoutes.post('/authenticate', function (req, res) {
-
-    // find the user
-    User.findOne({
-        name: req.body.login
-    }, function (err, user) {
+    User.findOne({name: req.body.login}, function (err, user) {
 
         if (err) throw err;
 
@@ -58,7 +56,6 @@ apiRoutes.post('/authenticate', function (req, res) {
 });
 
 apiRoutes.post('/users', function (req, res) {
-
     User.findOne({
         name: req.body.login
     }, function (err, user) {
@@ -69,7 +66,7 @@ apiRoutes.post('/users', function (req, res) {
             new User({name: req.body.login, password: req.body.password, 'ip': req.ip}).save(function (err) {
                 if (err) throw err;
                 res.json({success: true, message: 'User created!'});
-                io.sockets.emit('update', 'users');
+                io.sockets.emit('update', ['users']);
             });
 
         } else {
@@ -77,13 +74,32 @@ apiRoutes.post('/users', function (req, res) {
         }
     });
 });
-var ssh = [];
+
+var ssh = {};
 apiRoutes.post('/monitor', function (req, res) {
-    console.log(req.body);
+    var sshKey = req.body.ssh;
+    if (ssh[sshKey]) {
+        ssh[sshKey] = +new Date() + 3000;
+    } else {
+        ssh[sshKey] = +new Date() + 3000;
+        io.sockets.emit('update', 'ssh');
+    }
     res.status(200).send();
 });
+setInterval(function cleaner() {
+    var upd = false;
+    for (var k in ssh) {
+        if (ssh[k] < +new Date()) {
+            delete ssh[k];
+            upd = true;
+        }
+    }
+    if (upd) {
+        io.sockets.emit('update', 'ssh');
+    }
+}, 1000);
 
-//secure
+//secure check token on every request defined below
 apiRoutes.use(function (req, res, next) {
 
     var token = req.cookies['access_token'];
@@ -116,6 +132,7 @@ apiRoutes.get('/logout', function (req, res) {
     res.clearCookie('access_token');
     res.sendStatus(200);
 });
+
 apiRoutes.get('/ping/:host', function (req, res) {
     ping.sys.probe(req.params.host, function (isAlive) {
         if (isAlive) {
@@ -125,7 +142,6 @@ apiRoutes.get('/ping/:host', function (req, res) {
             res.status(404).send();
         }
     });
-
 });
 apiRoutes.get('/users', function (req, res) {
     User.find({}, {name: 1, ip: 1}, function (err, users) {
@@ -133,8 +149,36 @@ apiRoutes.get('/users', function (req, res) {
     });
 });
 
-apiRoutes.route('/users/:name')
+apiRoutes.route('/servers')
 
+    .get(function (req, res) {
+        Server.find({}, function (err, servers) {
+            res.json(servers);
+        });
+    })
+
+    .post(function (req, res) {
+        Server.findOne({ip: req.body.ip}, function (err, server) {
+
+            if (err) throw err;
+
+            if (!server) {
+                var owners = [];
+                if (req.body.owner) {
+                    owners.push(req.body.owners)
+                }
+                new Server({ip: req.body.ip, type: req.body.type, description: req.body.description, owners: owners})
+                    .save(function (err) {
+                        if (err) throw err;
+                        res.json({success: true, message: 'Server created!'});
+                        io.sockets.emit('update', ['servers']);
+                    });
+            } else {
+                res.status(403).json({success: false, message: 'Ip already in use!'});
+            }
+        });
+    });
+apiRoutes.route('/users/:name')
     .get(function (req, res) {
         //get user
     })
@@ -149,7 +193,7 @@ apiRoutes.route('/users/:name')
                     throw err;
                 }
                 res.sendStatus(200);
-                io.sockets.emit('update', 'users');
+                io.sockets.emit('update', ['users']);
             });
         });
     });

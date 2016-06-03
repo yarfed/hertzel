@@ -17,15 +17,15 @@
             socket.disconnect();
             self.$state.go('login');
         };
+
         this.deleteUser = function () {
             if (confirm('sure?')) {
                 self.$http.delete('api/users/' +self.data.user.name).then(function () {
                     self.logout();
                 });
             }
-
-
         };
+
         this.ping = function (host) {
             return self.$http.get('api/ping/'+host+'?r=' + Math.random());
         };
@@ -52,6 +52,9 @@
                         if (~data.indexOf('ssh')) {
                             self.getSSH();
                         }
+                        if (~data.indexOf('servers')) {
+                            self.getServers();
+                        }
                     });
                 },
                 function () {
@@ -62,10 +65,19 @@
         this.getAll = function () {
             this.getUsers();
             this.getSSH();
+            this.getServers();
         };
+
         this.getUsers = function () {
             $http.get('api/users?r=' + Math.random()).then(function (res) {
                 self.data.users = res.data;
+            });
+        };
+
+        this.getServers = function () {
+            $http.get('api/servers?r=' + Math.random()).then(function (res) {
+                self.data.servers = res.data;
+
             });
         };
         this.getSSH = function () {

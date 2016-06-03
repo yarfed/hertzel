@@ -6,7 +6,7 @@ var Schema = mongoose.Schema;
 
 module.exports = mongoose.model('Server', new Schema({
     ip: String,
+    type:String,
     description: String,
-    owners:[],
-    connections:[]
+    owners:[String],
 }));
