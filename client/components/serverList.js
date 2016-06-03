@@ -7,6 +7,7 @@
         this.data = myModel.data;
         this.$state=$state;
 
+
     }
 
     angular.module('myApp').component('serverList', {

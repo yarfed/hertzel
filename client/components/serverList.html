@@ -1,16 +1,29 @@
-<button ng-click="$ctrl.$state.go('app.addServer');">Add Server</button>
-<label>
-    all
-    <input type="radio" ng-model="$ctrl.data.filter" value="all">
-</label>
-<label>
-    my
-    <input type="radio" ng-model="$ctrl.data.filter" value="my">
-</label>
-<label>
-    user
-    <input type="radio" ng-model="$ctrl.data.filter" value="user">
-    ->
-</label>
-{{$ctrl.data.filter}}
-{{$ctrl.data.ssh}}
+<section>
+<nav>
+    <button ng-click="$ctrl.$state.go('app.addServer');">Add Server</button>
+    <label>
+        all
+        <input type="radio" ng-model="$ctrl.data.filter" value="all">
+    </label>
+    <label>
+        my
+        <input type="radio" ng-model="$ctrl.data.filter" value="my">
+    </label>
+    <label>
+        user
+        <input type="radio" ng-model="$ctrl.data.filter" value="user">
+
+    </label>
+    <label ng-show="$ctrl.data.filter=='user'">
+        ->
+        <select ng-model="$ctrl.server.owner">
+            <option ng-repeat="user in $ctrl.data.users" value="{{user.name}}">{{user.name}}</option>
+        </select>
+    </label>
+</nav>
+<server-small ng-repeat="s in $ctrl.data.servers" server=s
+              ng-class="(s==$ctrl.selected) ? 'selected' : ''" ng-click="$ctrl.selected=s"></server-small>
+</section>
+<aside>
+
+</aside>

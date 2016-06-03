@@ -19,9 +19,9 @@
             <select  ng-model="$ctrl.server.owner">
                 <option ng-repeat="user in $ctrl.data.users" value="{{user.name}}">{{user.name}}</option>
             </select>
+
             <button  type="button" ng-click="$ctrl.server.owner=$ctrl.data.user.name;"><-me</button>
             <button  type="button" ng-click="$ctrl.server.owner=null;">clear owner</button>
-
         </li>
         <li>
             <label>Description</label>

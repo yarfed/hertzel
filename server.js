@@ -165,7 +165,7 @@ apiRoutes.route('/servers')
             if (!server) {
                 var owners = [];
                 if (req.body.owner) {
-                    owners.push(req.body.owners)
+                    owners.push(req.body.owner)
                 }
                 new Server({ip: req.body.ip, type: req.body.type, description: req.body.description, owners: owners})
                     .save(function (err) {
