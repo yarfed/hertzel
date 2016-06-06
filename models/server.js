@@ -8,5 +8,5 @@ module.exports = mongoose.model('Server', new Schema({
     ip: String,
     type:String,
     description: String,
-    owners:[String],
+    owner:String,
 }));

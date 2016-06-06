@@ -33,15 +33,15 @@ login .logo-text {
     margin: 30px 0;
 }
 
-
 header img {
     height: 120px;
 }
+
 menu {
     border: 1px solid gray;
     border-radius: 5px;
-    height:65px;
-    padding: 0 5px ;
+    height: 65px;
+    padding: 0 5px;
     text-align: center;
     margin-top: 45px;
     margin-right: 30px;
@@ -70,7 +70,7 @@ menu li {
     text-align: center;
 }
 
-menu  li * {
+menu li * {
     display: block;
     height: 40px;
     width: 75px;
@@ -82,7 +82,7 @@ menu  li * {
 }
 
 user {
-    height:65px;
+    height: 65px;
     border: solid gray 1px;
     border-radius: 5px;
     float: right;
@@ -90,7 +90,6 @@ user {
     margin-right: 30px;
     padding: 0 5px;
 }
-
 
 user .online:before {
     content: "\2022";
@@ -107,7 +106,7 @@ user .offline:before {
 }
 
 hr {
-    clear:both;
+    clear: both;
 }
 
 server-form form {
@@ -159,22 +158,85 @@ server-form button {
     margin-left: 10px;
 }
 
-server-small{
+server-small {
     float: left;
-    width:130px;
-    height: 50px;
-    border:solid black 1px;
+    width: 130px;
+    height: 55px;
+    border: solid black 1px;
     margin: 10px;
 }
-server-small.selected{
+
+server-small.haveSSH {
+    background-color: #000000;
+    color: #ffffff;
+}
+
+server-small.selected {
     background-color: #dddddd;
 }
-server-small h3{
-    margin:3px 0 0 3px;
+server-small.selected.haveSSH {
+    background-color: #275280;
 }
-server-list section{
-   width:700px;
+server-small h3 {
+    margin: 3px 0 5px 5px;
 }
-server-list aside{
-    width: 300px;
+server-small .ssh {
+   float: right;
+}
+server-small span{
+   margin:0 3px 0 5px
+}
+app div{
+    width: 100%;
+    display: table;
+}
+
+app section {
+    display: table-cell;
+    vertical-align: top;
+    padding-left: 20px;
+}
+
+app aside {
+    display: table-cell;
+    width: 350px;
+    vertical-align: top;
+}
+
+
+messages {
+    display: block;
+    height: 300px;
+    border: solid black 1px;
+    border-radius: 5px;
+}
+
+messages header {
+    display: table-cell;
+    text-align: center;
+}
+
+messages header h3{
+  margin: 5px;
+}
+
+messages hr{
+    margin-bottom: 0;
+}
+
+@-webkit-keyframes glowing {
+    0% { background-color: #004A7F; -webkit-box-shadow: 0 0 3px #004A7F; }
+    50% { background-color: #0094FF; -webkit-box-shadow: 0 0 10px #0094FF; }
+    100% { background-color: #004A7F; -webkit-box-shadow: 0 0 3px #004A7F; }
+}
+
+@keyframes glowing {
+    0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+    50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
+    100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+}
+
+message.flash{
+    -webkit-animation: glowing 1500ms infinite;
+    animation: glowing 1500ms infinite;
 }

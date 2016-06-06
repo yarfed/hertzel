@@ -1,0 +1,3 @@
+<h3>{{$ctrl.server.ip}}</h3>
+<span>{{$ctrl.server.owner}}</span>
+<span class="ssh" ng-if="$ctrl.data.ssh[$ctrl.server.ip]">ssh:{{$ctrl.data.ssh[$ctrl.server.ip].length}}</span>

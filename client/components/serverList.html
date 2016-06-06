@@ -1,6 +1,7 @@
-<section>
 <nav>
     <button ng-click="$ctrl.$state.go('app.addServer');">Add Server</button>
+    <button ng-click="$ctrl.model.deleteServer();" ng-disabled="!$ctrl.data.selected">Delete Server</button>
+
     <label>
         all
         <input type="radio" ng-model="$ctrl.data.filter" value="all">
@@ -20,10 +21,17 @@
             <option ng-repeat="user in $ctrl.data.users" value="{{user.name}}">{{user.name}}</option>
         </select>
     </label>
+    <label>
+       free
+        <input type="radio" ng-model="$ctrl.data.filter" value="free">
+    </label>
 </nav>
-<server-small ng-repeat="s in $ctrl.data.servers" server=s
-              ng-class="(s==$ctrl.selected) ? 'selected' : ''" ng-click="$ctrl.selected=s"></server-small>
-</section>
-<aside>
 
-</aside>
+<server-small ng-repeat="s in $ctrl.data.servers" server=s
+              ng-class="{'selected': s==$ctrl.data.selected,'haveSSH' : $ctrl.data.ssh[s.ip]}"
+              ng-click="$ctrl.data.selected=s;$event.stopPropagation();"
+              ng-dblclick="$ctrl.$state.go('app.server');"
+              ng-mousedown="$event.preventDefault();">
+</server-small>
+
+

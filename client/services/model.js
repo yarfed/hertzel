@@ -7,7 +7,7 @@
         this.$http = $http;
         this.$state = $state;
         this.data = {};
-       this.data.filter="my";
+        this.data.filter = "my";
         var self = this;
         var socket;
 
@@ -20,14 +20,24 @@
 
         this.deleteUser = function () {
             if (confirm('sure?')) {
-                self.$http.delete('api/users/' +self.data.user.name).then(function () {
+                self.$http.delete('api/users/' + self.data.user.name).then(function () {
                     self.logout();
                 });
             }
         };
 
+        this.deleteServer = function () {
+            if (confirm('sure?')) {
+                self.$http.delete('api/servers/' + self.data.selected.ip).then(function () {
+                    self.data.selected = null;
+                });
+            }
+        };
+
+
+
         this.ping = function (host) {
-            return self.$http.get('api/ping/'+host+'?r=' + Math.random());
+            return self.$http.get('api/ping/' + host + '?r=' + Math.random());
         };
 
         this.login = function () {
@@ -70,19 +80,45 @@
 
         this.getUsers = function () {
             $http.get('api/users?r=' + Math.random()).then(function (res) {
-                self.data.users = res.data;
+                var users = res.data;
+                var index = {};
+                for (var i = 0; i < users.length; i++) {
+                    var ip = users[i].ip;
+                    if (ip) {
+                        index[ip] = users[i].name;
+                    }
+                }
+                self.data.users = users;
+                self.data.usersIndex = index;
             });
         };
 
         this.getServers = function () {
             $http.get('api/servers?r=' + Math.random()).then(function (res) {
                 self.data.servers = res.data;
-
+                if (self.data.selected) {
+                    self.data.servers.forEach(function (server) {
+                        if (self.data.selected.ip == server.ip) {
+                            self.data.selected = server;
+                        }
+                    });
+                }
             });
         };
         this.getSSH = function () {
             $http.get('api/ssh?r=' + Math.random()).then(function (res) {
-                self.data.ssh = res.data;
+                var sshRaw = res.data;
+                var ssh = {};
+                for (var p in sshRaw) {
+                    var arr = p.split(' ');
+                    var serverIP = arr[2], clientIP = arr[0];
+
+                    if (!ssh[serverIP]) {
+                        ssh[serverIP] = [];
+                    }
+                    ssh[serverIP].push(clientIP);
+                }
+                self.data.ssh = ssh;
             });
         };
 

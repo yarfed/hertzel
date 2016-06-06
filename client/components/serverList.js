@@ -6,8 +6,7 @@
     function ServerList(myModel,$state) {
         this.data = myModel.data;
         this.$state=$state;
-
-
+        this.model=myModel;
     }
 
     angular.module('myApp').component('serverList', {

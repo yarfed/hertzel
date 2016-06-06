@@ -63,7 +63,8 @@ apiRoutes.post('/users', function (req, res) {
         if (err) throw err;
 
         if (!user) {
-            new User({name: req.body.login, password: req.body.password, 'ip': req.ip}).save(function (err) {
+            var ip = req.ip.replace(/[^\\.0-9]/gim, '');
+            new User({name: req.body.login, password: req.body.password, 'ip': ip}).save(function (err) {
                 if (err) throw err;
                 res.json({success: true, message: 'User created!'});
                 io.sockets.emit('update', ['users']);
@@ -163,28 +164,45 @@ apiRoutes.route('/servers')
             if (err) throw err;
 
             if (!server) {
-                var owners = [];
-                if (req.body.owner) {
-                    owners.push(req.body.owner)
-                }
-                new Server({ip: req.body.ip, type: req.body.type, description: req.body.description, owners: owners})
-                    .save(function (err) {
-                        if (err) throw err;
-                        res.json({success: true, message: 'Server created!'});
-                        io.sockets.emit('update', ['servers']);
-                    });
+
+                new Server({
+                    ip: req.body.ip,
+                    type: req.body.type,
+                    description: req.body.description,
+                    owner: req.body.owner
+                }).save(function (err) {
+                    if (err) throw err;
+                    res.json({success: true, message: 'Server created!'});
+                    io.sockets.emit('update', ['servers']);
+                });
             } else {
                 res.status(403).json({success: false, message: 'Ip already in use!'});
             }
         });
     });
+
 apiRoutes.route('/users/:name')
     .get(function (req, res) {
         //get user
     })
 
     .delete(function (req, res) {
-        User.findOne({name: req.params.name}, function (err, model) {
+
+        User.remove({name: req.params.name}, function (err) {
+            if (err) {
+                res.sendStatus(404);
+            }
+            Server.update({owner: req.params.name}, {$set: {owner: null}}, {multi: true}).exec();
+            res.sendStatus(200);
+            io.sockets.emit('update', ['users']);
+        });
+    });
+
+apiRoutes.route('/servers/:ip')
+
+    .delete(function (req, res) {
+
+        Server.findOne({ip: req.params.ip}, function (err, model) {
             if (err) {
                 throw err;
             }
@@ -193,10 +211,31 @@ apiRoutes.route('/users/:name')
                     throw err;
                 }
                 res.sendStatus(200);
-                io.sockets.emit('update', ['users']);
+                io.sockets.emit('update', ['servers']);
             });
         });
     });
+
+apiRoutes.route('/servers/owner').post(function (req, res) {
+    var ip=req.body.ip;
+    var oldOwner=req.body.oldOwner;
+    var newOwner=req.body.newOwner;
+    var changer=req.body.changer;
+    if (oldOwner==newOwner){
+        res.sendStatus(401);
+        return;
+    }
+
+    Server.update({ip: ip}, {$set: {owner: newOwner}}, function(err){
+        if (err) {
+            throw err;
+        }
+        res.sendStatus(200);
+        io.sockets.emit('update', ['servers']);
+    });
+});
+
+
 
 apiRoutes.get('/ssh', function (req, res) {
     res.json(ssh);
