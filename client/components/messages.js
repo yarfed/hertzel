@@ -3,11 +3,11 @@
  */
 (function () {
     'use strict';
-    function Messages(myModel,$timeout) {
+    function Messages(myModel) {
         this.data = myModel.data;
         this.model=myModel;
-
     }
+
 
     angular.module('myApp').component('messages', {
         controller: Messages,

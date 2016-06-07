@@ -4,31 +4,32 @@
 (function () {
     'use strict';
     angular.module('myApp', ['ui.router'])
+
         .config(function ($stateProvider, $urlRouterProvider) {
-        $urlRouterProvider.otherwise("/app/servers");
+            $urlRouterProvider.otherwise("/app/servers");
 
-        $stateProvider
-            .state('login', {
-                template: "<login></login>",
-                url: "/login"
-            })
+            $stateProvider
+                .state('login', {
+                    template: "<login></login>",
+                    url: "/login"
+                })
 
-            .state('app', {
-                url: "/app",
-                template: "<app></app>",
-                abstract:true
-            })
-            .state('app.servers', {
-                url: "/servers",
-                template: "<server-list></server-list>"
-            })
-            .state('app.addServer', {
-                url: "/addServer",
-                template: "<server-form></server-form>"
-            })
-            .state('app.server', {
-                url: "/server",
-                template: "<server-big></server-big>"
-            })
-    });
+                .state('app', {
+                    url: "/app",
+                    template: "<app></app>",
+                    abstract: true
+                })
+                .state('app.servers', {
+                    url: "/servers",
+                    template: "<server-list></server-list>"
+                })
+                .state('app.addServer', {
+                    url: "/addServer",
+                    template: "<server-form></server-form>"
+                })
+                .state('app.server', {
+                    url: "/server",
+                    template: "<server-big></server-big>"
+                })
+        });
 })();

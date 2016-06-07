@@ -1,14 +1,17 @@
 <h1>{{$ctrl.data.selected.ip}}</h1>
 <h2>{{$ctrl.data.selected.type}}</h2>
 <h3>{{$ctrl.data.selected.owner||'free server'}}</h3>
-
 <div ng-repeat="ssh in $ctrl.data.ssh[$ctrl.data.selected.ip] track by $index">ssh: {{$ctrl.data.usersIndex[ssh]||ssh}}
 </div>
-<button ng-if="$ctrl.data.selected.owner!=$ctrl.data.user.name" ng-click="$ctrl.take();">Take Ownership</button>
-<button ng-if="$ctrl.data.selected.owner==$ctrl.data.user.name" ng-click="">leave Server</button>
-<button ng-click="">Set Owner</button>
-<select ng-model="$ctrl.owner">
-    <option ng-repeat="user in $ctrl.data.users" value="{{user.name}}">{{user.name}}</option>
+<button ng-if="$ctrl.data.selected.owner!=$ctrl.data.user.name" ng-click="$ctrl.take($ctrl.data.user.name);">
+    Take Ownership
+</button>
+<button ng-if="$ctrl.data.selected.owner==$ctrl.data.user.name" ng-click="$ctrl.take(null);">leave Server</button>
+<button ng-click="$ctrl.take($ctrl.newOwner);"
+        ng-disabled="(!$ctrl.newOwner)||($ctrl.newOwner==$ctrl.data.selected.owner)||$ctrl.newOwner==$ctrl.data.user.name">
+    Set Owner
+</button>
+<select ng-model="$ctrl.newOwner" ng-options="user.name as user.name for user in $ctrl.data.users">
 </select>
 <br>
 <button ng-click="$ctrl.$state.go('app.servers');">Back</button>

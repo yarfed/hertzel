@@ -15,8 +15,9 @@ var jwt = require('jsonwebtoken');
 var config = require('./config');
 var User = require('./models/user');
 var Server = require('./models/server');
+var Message = require('./models/message');
 var ping = require('ping');
-var port = process.env.PORT || 80;
+var port = process.env.PORT || 3000;
 mongoose.connect(config.database);
 app.set('superSecret', config.secret);
 app.use(express.static('client'));
@@ -194,7 +195,7 @@ apiRoutes.route('/users/:name')
             }
             Server.update({owner: req.params.name}, {$set: {owner: null}}, {multi: true}).exec();
             res.sendStatus(200);
-            io.sockets.emit('update', ['users']);
+            io.sockets.emit('update', ['users','servers']);
         });
     });
 
@@ -217,25 +218,51 @@ apiRoutes.route('/servers/:ip')
     });
 
 apiRoutes.route('/servers/owner').post(function (req, res) {
-    var ip=req.body.ip;
-    var oldOwner=req.body.oldOwner;
-    var newOwner=req.body.newOwner;
-    var changer=req.body.changer;
-    if (oldOwner==newOwner){
-        res.sendStatus(401);
-        return;
-    }
+    var ip = req.body.ip;
+    var oldOwner = req.body.oldOwner;
+    var newOwner = req.body.newOwner;
+    var changer = req.body.changer;
 
-    Server.update({ip: ip}, {$set: {owner: newOwner}}, function(err){
+    Server.update({ip: ip}, {$set: {owner: newOwner}}, function (err) {
         if (err) {
             throw err;
         }
         res.sendStatus(200);
         io.sockets.emit('update', ['servers']);
+        if(oldOwner&&oldOwner!=changer) {
+            new Message({
+                name: oldOwner,
+                date: new Date(),
+                text: newOwner + ' take server:' + ip + ((newOwner != changer) ? ' by ' + changer : '')
+            })
+                .save(function (err,message) {
+                    if (err) throw err;
+                    io.sockets.emit('message:' + oldOwner,message.id);
+                });
+        }
     });
 });
 
-
+apiRoutes.route('/messages/:name')
+    .get(function (req, res) {
+        Message.find({name: req.params.name}, function (err, messages) {
+            res.json(messages);
+        });
+    });
+apiRoutes.route('/messages/:name/:id')
+    .get(function (req, res) {
+        Message.findOne({_id: req.params.id}, function (err, message) {
+            res.json(message);
+        });
+    })
+    .delete(function (req, res) {
+        Message.remove({_id: req.params.id}, function (err) {
+         if (err) {
+         res.sendStatus(404);
+         }
+         res.sendStatus(200);
+         });
+    });
 
 apiRoutes.get('/ssh', function (req, res) {
     res.json(ssh);

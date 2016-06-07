@@ -3,19 +3,31 @@
  */
 (function () {
     'use strict';
-    function ServerBig(myModel,$state,$http) {
+    function ServerBig(myModel, $state, $http) {
         this.data = myModel.data;
-        this.$state=$state;
-        this.model=myModel;
-        this.$http=$http;
-        if (!this.data.selected){
+        this.$state = $state;
+        this.model = myModel;
+        this.$http = $http;
+        if (!this.data.selected) {
             $state.go('app.servers');
         }
     }
-    ServerBig.prototype.take = function () {
-        var self=this;
-        if (confirm('sure? '+this.data.selected.owner+' will know who you are!!!' )) {
-            self.$http.post('api/servers/owner' ,{'ip':self.data.selected.ip, 'newOwner':self.data.user.name});
+
+    ServerBig.prototype.take = function (newOwner) {
+        var self = this;
+
+        if (!self.data.selected.owner||//if server free
+            self.data.selected.owner==self.data.user.name||//if it own server
+            confirm('sure? ' + self.data.selected.owner + ' will know who you are!!!')) {
+            self.$http.post('api/servers/owner',
+                {
+                    'ip': self.data.selected.ip,
+                    'newOwner': newOwner,
+                    'oldOwner': self.data.selected.owner,
+                    'changer': self.data.user.name
+                }).then(function(){
+                self.$state.go('app.servers');
+            })
         }
     };
 

@@ -1,5 +1,5 @@
 #!/bin/bash
-host="192.168.1.101"
+host="62.109.11.169:3000"
 read -a arr <<< $SSH_CONNECTION
 while true
 do

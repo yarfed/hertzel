@@ -157,6 +157,9 @@ server-form textarea {
 server-form button {
     margin-left: 10px;
 }
+server-list table{
+    display: block;
+}
 
 server-small {
     float: left;
@@ -174,19 +177,24 @@ server-small.haveSSH {
 server-small.selected {
     background-color: #dddddd;
 }
+
 server-small.selected.haveSSH {
     background-color: #275280;
 }
+
 server-small h3 {
     margin: 3px 0 5px 5px;
 }
+
 server-small .ssh {
-   float: right;
+    float: right;
 }
-server-small span{
-   margin:0 3px 0 5px
+
+server-small span {
+    margin: 0 3px 0 5px
 }
-app div{
+
+app div {
     width: 100%;
     display: table;
 }
@@ -203,40 +211,73 @@ app aside {
     vertical-align: top;
 }
 
-
 messages {
     display: block;
+    overflow: scroll;
+    overflow-x: hidden;
     height: 300px;
     border: solid black 1px;
     border-radius: 5px;
 }
 
 messages header {
-    display: table-cell;
+    margin: 0;
     text-align: center;
+    width: 100%;
 }
 
-messages header h3{
-  margin: 5px;
+messages header h3 {
+    margin: 4px;
 }
 
-messages hr{
+messages hr {
     margin-bottom: 0;
 }
 
 @-webkit-keyframes glowing {
-    0% { background-color: #004A7F; -webkit-box-shadow: 0 0 3px #004A7F; }
-    50% { background-color: #0094FF; -webkit-box-shadow: 0 0 10px #0094FF; }
-    100% { background-color: #004A7F; -webkit-box-shadow: 0 0 3px #004A7F; }
+    0% {
+        background-color: #004A7F;
+        -webkit-box-shadow: 0 0 3px #004A7F;
+    }
+    50% {
+        background-color: #0094FF;
+        -webkit-box-shadow: 0 0 10px #0094FF;
+    }
+    100% {
+        background-color: #004A7F;
+        -webkit-box-shadow: 0 0 3px #004A7F;
+    }
 }
 
 @keyframes glowing {
-    0% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
-    50% { background-color: #0094FF; box-shadow: 0 0 10px #0094FF; }
-    100% { background-color: #004A7F; box-shadow: 0 0 3px #004A7F; }
+    0% {
+        background-color: #004A7F;
+        box-shadow: 0 0 3px #004A7F;
+    }
+    50% {
+        background-color: #0094FF;
+        box-shadow: 0 0 10px #0094FF;
+    }
+    100% {
+        background-color: #004A7F;
+        box-shadow: 0 0 3px #004A7F;
+    }
 }
 
-message.flash{
+.flash {
     -webkit-animation: glowing 1500ms infinite;
     animation: glowing 1500ms infinite;
+}
+
+message {
+    display: inline-block;
+    padding: 3px;
+    width: 100%;
+    border-bottom: solid black 1px;
+}
+
+message button {
+    float: right;
+    margin-right: 7px;
+    border-radius: 50%;
 }

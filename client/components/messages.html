@@ -1,5 +1,6 @@
-<header>
-    <h3>Messages</h3>
+<header >
+    <h3 ng-class="$ctrl.data.messagesClass">Messages</h3>
 </header>
 <hr>
-<message ></message>
+<message ng-repeat="m in $ctrl.data.messages | orderBy:'-date'" message=m ng-class="{'flash':m.new}">
+</message>

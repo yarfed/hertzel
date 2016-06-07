@@ -3,11 +3,13 @@
  */
 (function () {
     'use strict';
-    angular.module('myApp').service('myModel', function ($http, $state, $rootScope) {
+    angular.module('myApp').service('myModel', function ($http, $state, $rootScope, $timeout, $window,$interval) {
         this.$http = $http;
         this.$state = $state;
+        this.$timeout = $timeout;
+        this.$interval = $interval;
+        this.$window = $window;
         this.data = {};
-        this.data.filter = "my";
         var self = this;
         var socket;
 
@@ -33,7 +35,13 @@
                 });
             }
         };
+        this.deleteMessage = function (message) {
 
+            self.$http.delete('api/messages/name/' + message._id).then(function () {
+                self.getMessages();
+            });
+
+        };
 
 
         this.ping = function (host) {
@@ -66,6 +74,25 @@
                             self.getServers();
                         }
                     });
+                    socket.on('message:' + self.data.user.name, function (id) {
+
+                        self.getMessage(id).then(function (message) {
+
+                            if ('Notification' in window) {
+                                if (Notification.permission !== "granted")
+                                    Notification.requestPermission();
+                                else {
+                                    new Notification(message.name + '!!!', {body: message.text});
+                                }
+                            } else {
+                              self.$window.onfocus();
+                            }
+                            message.new = true;
+                            self.$timeout(function () {
+                                message.new = false;
+                            }, 3000);
+                        });
+                    });
                 },
                 function () {
                     self.$state.go('login');
@@ -76,6 +103,7 @@
             this.getUsers();
             this.getSSH();
             this.getServers();
+            this.getMessages();
         };
 
         this.getUsers = function () {
@@ -105,6 +133,7 @@
                 }
             });
         };
+
         this.getSSH = function () {
             $http.get('api/ssh?r=' + Math.random()).then(function (res) {
                 var sshRaw = res.data;
@@ -121,7 +150,19 @@
                 self.data.ssh = ssh;
             });
         };
-
+        this.getMessages = function () {
+            var name = self.data.user.name;
+            $http.get('api/messages/' + name + '?r=' + Math.random()).then(function (res) {
+                self.data.messages = res.data;
+            });
+        };
+        this.getMessage = function (id) {
+            var name = self.data.user.name;
+            return $http.get('api/messages/' + name + '/' + id).then(function (res) {
+                self.data.messages.push(res.data);
+                return res.data;
+            });
+        };
         self.login();
     });
 })();

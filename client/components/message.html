@@ -1,1 +1,2 @@
-<span>{{$ctrl.message.date}} {{$ctrl.message.text}}</span><button>del</button>
+<span>{{$ctrl.message.date | date : 'MM d, HH:mm'}} {{$ctrl.message.text}}</span>
+<button ng-click="$ctrl.model.deleteMessage($ctrl.message)">X</button>
